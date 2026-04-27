@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
 
 // --- Helper: Call Gemini API ---
 async function askGemini(prompt) {
@@ -15,12 +16,20 @@ async function askGemini(prompt) {
     console.log("Using API Key starting with:", GEMINI_API_KEY ? GEMINI_API_KEY.substring(0, 5) : "MISSING");
 
     const response = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-        })
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    contents: [
+      {
+        parts: [
+          { text: prompt }
+        ]
+      }
+    ]
+  })
+});
 
     const json = await response.json();
 

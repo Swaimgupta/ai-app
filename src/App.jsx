@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo,useRef } from "react";
 import Papa from "papaparse";
 import { 
   Trash2, MessageSquare, ShieldCheck, Play, 
@@ -11,6 +11,7 @@ import "./App.css";
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const App = () => {
+  const fileInputRef = useRef(null);
   const [data, setData] = useState([]);
   const [cols, setCols] = useState([]);
   const [anomalies, setAnomalies] = useState([]);
@@ -136,11 +137,18 @@ const App = () => {
             <div className="logo-icon"><ShieldCheck size={22} /></div>
             <span>DataGuardian <span className="brand-accent">AI</span></span>
           </div>
-          <label className="file-upload-btn">
-            <Upload size={16} />
-            <span>{data.length > 0 ? "Change Dataset" : "Upload CSV"}</span>
-            <input type="file" onChange={handleFile} accept=".csv" hidden />
-          </label>
+           <label className="file-upload-btn">
+  <Upload size={16} />
+  <span>{data.length > 0 ? "Change Dataset" : "Upload CSV"}</span>
+
+  <input
+    type="file"
+    ref={fileInputRef}
+    onChange={handleFile}
+    accept=".csv"
+    hidden
+  />
+</label>
         </header>
 
         {data.length > 0 ? (
@@ -260,9 +268,13 @@ const App = () => {
           </div>
         ) : (
           <div className="empty-dashboard">
-            <div className="upload-illustration">
-              <Upload size={40} className="text-indigo-400" />
-            </div>
+            <div
+  className="upload-illustration"
+  onClick={() => fileInputRef.current.click()}
+  style={{ cursor: "pointer" }}
+>
+  <Upload size={40} className="text-indigo-400" />
+</div>
             <h2>No Data Loaded</h2>
             <p>Upload a CSV file to analyze bias and audit data quality using AI.</p>
           </div>

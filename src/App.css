@@ -444,3 +444,7 @@ tr:hover td { background: #f1f5f9; }
   box-shadow: var(--shadow);
   margin-bottom: 1.5rem;
 }
+.upload-illustration:hover {
+  transform: scale(1.05);
+  transition: 0.2s;
+}
